@@ -15,90 +15,10 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #000;
+      background: #ffffff;
       font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
     }
 
-    /* ===== 全局背景：山水风格 ===== */
-    .bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background:
-        radial-gradient(ellipse 80% 50% at 50% 20%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 60%),
-        linear-gradient(180deg, #d8f0ff 0%, #b0e0ff 30%, #7ec8f0 70%, #4a9fd6 100%);
-      z-index: 0;
-    }
-
-    /* 云层 */
-    .cloud {
-      position: absolute;
-      background: rgba(255,255,255,0.55);
-      border-radius: 50%;
-      filter: blur(25px);
-    }
-    .cloud-1 { width: 45vw; height: 12vh; top: 8vh; left: -5vw; }
-    .cloud-2 { width: 35vw; height: 10vh; top: 15vh; right: -5vw; }
-    .cloud-3 { width: 30vw; height: 8vh; top: 5vh; left: 35vw; }
-
-    /* 远山 */
-    .mountain {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 45vh;
-      background: linear-gradient(180deg, rgba(78,145,198,0.85) 0%, rgba(30,90,150,0.95) 100%);
-      clip-path: polygon(
-        0% 100%, 0% 55%, 8% 45%, 15% 52%, 22% 38%, 30% 48%, 38% 32%, 48% 44%,
-        58% 28%, 68% 42%, 78% 30%, 88% 46%, 95% 36%, 100% 50%, 100% 100%
-      );
-      z-index: 1;
-    }
-
-    .mountain-front {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 32vh;
-      background: linear-gradient(180deg, rgba(20,80,140,0.95) 0%, rgba(10,50,100,1) 100%);
-      clip-path: polygon(
-        0% 100%, 0% 70%, 12% 55%, 25% 68%, 38% 48%, 52% 62%,
-        65% 45%, 78% 58%, 90% 42%, 100% 55%, 100% 100%
-      );
-      z-index: 2;
-    }
-
-    /* 金色光带 */
-    .light-band {
-      position: absolute;
-      bottom: 18vh;
-      left: -10%;
-      width: 80%;
-      height: 3vh;
-      background: linear-gradient(90deg, transparent 0%, rgba(255,215,120,0.8) 40%, rgba(255,230,160,0.9) 60%, transparent 100%);
-      filter: blur(8px);
-      transform: rotate(-3deg);
-      z-index: 3;
-    }
-
-    /* 鹰 - 只在封面展示 */
-    .eagle {
-      position: absolute;
-      top: 42vh;
-      left: 12vw;
-      width: 12vw;
-      height: auto;
-      z-index: 4;
-      filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
-      opacity: 0.95;
-      pointer-events: none;
-    }
-
-    /* ===== 幻灯片容器 ===== */
     .slide {
       position: absolute;
       top: 0;
@@ -108,71 +28,26 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
       z-index: 10;
       pointer-events: none;
-    }
-
-    .slide.active {
-      opacity: 1;
-      z-index: 11;
     }
 
     .slide-content {
       position: relative;
       z-index: 12;
-      width: 90%;
-      max-width: 90vw;
-      text-align: center;
+      width: 92%;
+      max-width: 92vw;
     }
 
-    /* ===== 第一页：封面 ===== */
-    .slide-1 .slide-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2vh;
-      padding-bottom: 10vh;
-    }
-
-    .slide-1 .title {
-      font-size: 9vw;
-      font-weight: 500;
-      color: #1a1a1a;
-      letter-spacing: 0.5vw;
-      text-shadow: 2px 2px 8px rgba(255,255,255,0.6);
-      line-height: 1.1;
-    }
-
-    .slide-1 .subtitle {
+    .header {
       font-size: 5vw;
-      font-weight: 400;
+      font-weight: 700;
       color: #1a1a1a;
-      letter-spacing: 0.3vw;
-      text-shadow: 1px 1px 6px rgba(255,255,255,0.6);
-      line-height: 1.2;
-    }
-
-    .slide-1 .english {
-      font-size: 2.2vw;
-      font-weight: 400;
-      color: #333;
-      letter-spacing: 0.15vw;
-      margin-top: 1vh;
-      white-space: nowrap;
-      text-shadow: 1px 1px 4px rgba(255,255,255,0.5);
-    }
-
-    /* ===== 第二页：内容列表 ===== */
-    .slide-2 .slide-content {
-      text-align: left;
-      padding: 3vh 6vw 4vh 6vw;
-      height: 98vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      text-align: center;
+      letter-spacing: 0.5vw;
+      margin-bottom: 3.5vh;
+      padding-bottom: 1.5vh;
+      border-bottom: 2px solid #e0e0e0;
     }
 
     .culture-list {
@@ -182,11 +57,11 @@
 
     .culture-list li {
       font-size: 1.9vw;
-      line-height: 1.55;
+      line-height: 1.6;
       color: #1a1a1a;
-      margin-bottom: 0.35vh;
+      margin-bottom: 0.3vh;
       text-align: left;
-      text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+      white-space: nowrap;
     }
 
     .culture-list li.highlight,
@@ -199,7 +74,6 @@
       padding-left: 2.8vw;
     }
 
-    /* ===== 提示 ===== */
     #hint {
       position: fixed;
       bottom: 40px;
@@ -219,54 +93,13 @@
     #hint.hidden {
       opacity: 0;
     }
-
-    /* 小屏/竖屏适配 */
-    @media (max-aspect-ratio: 4/3) {
-      .slide-1 .title { font-size: 11vw; }
-      .slide-1 .subtitle { font-size: 6.5vw; }
-      .slide-1 .english { font-size: 3.5vw; }
-      .culture-list li { font-size: 2.6vw; line-height: 1.5; }
-    }
   </style>
 </head>
 <body>
-  <!-- 背景 -->
-  <div class="bg">
-    <div class="cloud cloud-1"></div>
-    <div class="cloud cloud-2"></div>
-    <div class="cloud cloud-3"></div>
-    <div class="mountain"></div>
-    <div class="mountain-front"></div>
-    <div class="light-band"></div>
-  </div>
-
-  <!-- 第一页 -->
-  <div class="slide slide-1 active">
-    <svg class="eagle" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="wingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#4a3728;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#2a1d15;stop-opacity:1" />
-        </linearGradient>
-      </defs>
-      <path d="M100 55 Q60 35 15 40 Q55 50 85 60 Z" fill="url(#wingGrad)"/>
-      <path d="M100 55 Q140 35 185 40 Q145 50 115 60 Z" fill="url(#wingGrad)"/>
-      <ellipse cx="100" cy="62" rx="10" ry="22" fill="#5c4033"/>
-      <circle cx="100" cy="42" r="9" fill="#d4a574"/>
-      <path d="M100 38 L108 42 L100 45 Z" fill="#f4c430"/>
-      <path d="M95 80 L85 105 L100 95 L115 105 L105 80 Z" fill="#3d2b1f"/>
-    </svg>
+  <div class="slide">
     <div class="slide-content">
-      <div class="title">企业文化</div>
-      <div class="subtitle">员工篇</div>
-      <div class="english">Our Culture • For Employees</div>
-    </div>
-  </div>
-
-  <!-- 第二页 -->
-  <div class="slide slide-2">
-    <div class="slide-content">
-      <ul class="culture-list">
+      <div class="header">企业文化</div>
+      <ul class="culture-list" id="cultureList">
         <li>1.用户至上：一切思考源于用户。</li>
         <li>2.奥卡姆剃刀原则：但无必要，勿增实体。</li>
         <li>3.多重预案：永远都不能只有Plan A，一定要有Plan B和C。</li>
@@ -278,10 +111,10 @@
         <li>9.开放心态：敢于批评与自我批评，能接受批评的人潜力无限。</li>
         <li>10.严谨负责：向他人和大家提供的信息和推行的事项需要打磨后，核实后，下了功夫才能发出。</li>
         <li>11.勤俭务实：俭以养德，勤俭持家。</li>
-        <li>12.工作哲学：热爱工作，找到工作的节奏和结构，工作就是“在这个世界打怪快速升级”的最好机会，敬畏、尊重和珍惜工作和身边的同事，工作的终极目标依然是幸福、快乐和自由。</li>
+        <li>12.工作哲学：热爱工作，找到工作的节奏和结构，工作就是"在这个世界打怪快速升级"的最好机会，敬畏、尊重和珍惜工作和身边的同事，工作的终极目标依然是幸福、快乐和自由。</li>
         <li>13.德行根基：德行是一切的基础，德行是幸福的基石，财富的密码，成功的要素。</li>
         <li class="highlight">14.公司的根本目的：</li>
-        <li class="highlight indent">“带一群人不断成长，发光发热，共同寻找快乐、幸福和自由。”</li>
+        <li class="highlight indent">"带一群人不断成长，发光发热，共同寻找快乐、幸福和自由。"</li>
       </ul>
     </div>
   </div>
@@ -290,24 +123,32 @@
 
   <script>
     (function () {
-      const slides = document.querySelectorAll('.slide');
-      let current = 0;
-      // 第一页 3 秒，第二页 20 秒
-      const durations = [3000, 20000];
+      function fitList() {
+        var list = document.getElementById('cultureList');
+        var lis = list.querySelectorAll('li');
+        var container = list.parentElement;
+        var availW = container.clientWidth - 2;
+        var minSize = 0.8;
+        var size = 1.9;
 
-      function showNext() {
-        slides[current].classList.remove('active');
-        current = (current + 1) % slides.length;
-        slides[current].classList.add('active');
-        setTimeout(showNext, durations[current]);
+        function measure() {
+          list.style.fontSize = size + 'vw';
+          var maxW = 0;
+          for (var i = 0; i < lis.length; i++) {
+            var w = lis[i].scrollWidth;
+            if (w > maxW) maxW = w;
+          }
+          return maxW;
+        }
+
+        while (measure() > availW && size > minSize) {
+          size -= 0.05;
+        }
+        list.style.fontSize = size + 'vw';
       }
 
-      // 首次切换按第一页的时长
-      setTimeout(showNext, durations[current]);
-
-      // 全屏
       function enterFullscreen() {
-        const elem = document.documentElement;
+        var elem = document.documentElement;
         if (elem.requestFullscreen) {
           elem.requestFullscreen().catch(function () {});
         } else if (elem.webkitRequestFullscreen) {
@@ -318,7 +159,11 @@
         document.getElementById('hint').classList.add('hidden');
       }
 
-      window.addEventListener('load', enterFullscreen);
+      window.addEventListener('load', function () {
+        fitList();
+        enterFullscreen();
+      });
+      window.addEventListener('resize', fitList);
       document.addEventListener('click', enterFullscreen);
       document.addEventListener('touchstart', enterFullscreen);
       document.addEventListener('keydown', enterFullscreen);
