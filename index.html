@@ -40,12 +40,12 @@
     }
 
     .header {
-      font-size: 5vw;
+      font-size: 4.5vw;
       font-weight: 700;
       color: #1a1a1a;
       text-align: center;
       letter-spacing: 0.5vw;
-      margin-bottom: 3.5vh;
+      margin-bottom: 3vh;
       padding-bottom: 1.5vh;
       border-bottom: 2px solid #e0e0e0;
     }
@@ -56,18 +56,17 @@
     }
 
     .culture-list li {
-      font-size: 1.9vw;
+      font-size: 1.5vw;
       line-height: 1.6;
       color: #1a1a1a;
       margin-bottom: 0.3vh;
       text-align: left;
-      white-space: nowrap;
     }
 
     .culture-list li.highlight,
     .culture-list li.highlight strong {
-      color: #c62828;
       font-weight: 700;
+      color: #1a1a1a;
     }
 
     .culture-list li.indent {
@@ -99,7 +98,7 @@
   <div class="slide">
     <div class="slide-content">
       <div class="header">企业文化</div>
-      <ul class="culture-list" id="cultureList">
+      <ul class="culture-list">
         <li>1.用户至上：一切思考源于用户。</li>
         <li>2.奥卡姆剃刀原则：但无必要，勿增实体。</li>
         <li>3.多重预案：永远都不能只有Plan A，一定要有Plan B和C。</li>
@@ -123,30 +122,6 @@
 
   <script>
     (function () {
-      function fitList() {
-        var list = document.getElementById('cultureList');
-        var lis = list.querySelectorAll('li');
-        var container = list.parentElement;
-        var availW = container.clientWidth - 2;
-        var minSize = 0.8;
-        var size = 1.9;
-
-        function measure() {
-          list.style.fontSize = size + 'vw';
-          var maxW = 0;
-          for (var i = 0; i < lis.length; i++) {
-            var w = lis[i].scrollWidth;
-            if (w > maxW) maxW = w;
-          }
-          return maxW;
-        }
-
-        while (measure() > availW && size > minSize) {
-          size -= 0.05;
-        }
-        list.style.fontSize = size + 'vw';
-      }
-
       function enterFullscreen() {
         var elem = document.documentElement;
         if (elem.requestFullscreen) {
@@ -159,11 +134,7 @@
         document.getElementById('hint').classList.add('hidden');
       }
 
-      window.addEventListener('load', function () {
-        fitList();
-        enterFullscreen();
-      });
-      window.addEventListener('resize', fitList);
+      window.addEventListener('load', enterFullscreen);
       document.addEventListener('click', enterFullscreen);
       document.addEventListener('touchstart', enterFullscreen);
       document.addEventListener('keydown', enterFullscreen);
