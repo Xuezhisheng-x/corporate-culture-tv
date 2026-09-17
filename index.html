@@ -41,22 +41,22 @@
 
     .slide-content {
       position: relative;
-      width: 92%;
-      max-width: 92vw;
-      padding-top: 2.5vh;
-      padding-bottom: 2vh;
+      width: 95%;
+      max-width: 95vw;
+      padding-top: 1.5vh;
+      padding-bottom: 1vh;
       font-size: 3vh;
     }
 
     /* ===== 表头：每页都有 ===== */
     .header {
-      font-size: 2.2em;
+      font-size: 1.9em;
       font-weight: 700;
       color: #1a1a1a;
       text-align: center;
       letter-spacing: 0.05em;
-      margin-bottom: 0.5em;
-      padding-bottom: 0.32em;
+      margin-bottom: 0.4em;
+      padding-bottom: 0.25em;
       border-bottom: 3px solid #c62828;
     }
 
@@ -68,7 +68,7 @@
 
     .culture-list li {
       font-size: 1em;
-      line-height: 1.45;
+      line-height: 1.28;
       color: #1a1a1a;
       text-align: left;
     }
@@ -147,21 +147,22 @@
       var slides = document.querySelectorAll('.slide');
       var contents = document.querySelectorAll('.slide-content');
 
+      /* ===== 自动适配字号：让每页都刚好撑满一屏，两页字号统一 ===== */
       function fitOne(el, limit) {
-        var size = 6;
+        var size = 7; // 起始 7vh
         el.style.fontSize = size + 'vh';
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 12; i++) {
           var h = el.getBoundingClientRect().height;
           if (h <= limit) break;
-          size = size * (limit / h) * 0.98;
-          if (size < 1.2) { size = 1.2; break; }
+          size = size * (limit / h) * 0.99;
+          if (size < 1.5) { size = 1.5; break; }
           el.style.fontSize = size + 'vh';
         }
         return size;
       }
 
       function fitAll() {
-        var limit = window.innerHeight * 0.95;
+        var limit = window.innerHeight * 0.985;
         var min = 99;
         for (var i = 0; i < contents.length; i++) {
           var s = fitOne(contents[i], limit);
@@ -172,6 +173,7 @@
         }
       }
 
+      /* ===== 全屏 ===== */
       function enterFullscreen() {
         var elem = document.documentElement;
         if (elem.requestFullscreen) {
@@ -184,6 +186,7 @@
         document.getElementById('hint').classList.add('hidden');
       }
 
+      /* ===== 每 10 秒切换一页，来回循环 ===== */
       var current = 0;
       function nextSlide() {
         slides[current].classList.remove('active');
