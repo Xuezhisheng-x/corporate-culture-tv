@@ -19,15 +19,15 @@
       font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
     }
 
-    /* ===== 每一页 ===== */
+    /* ===== 每一页：直接用 fixed 铺满视口，最可靠 ===== */
     .slide {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      right: 0;
+      bottom: 0;
       display: flex;
-      align-items: flex-start;
+      align-items: stretch;
       justify-content: center;
       opacity: 0;
       transition: opacity 0.8s ease;
@@ -39,17 +39,21 @@
       opacity: 1;
     }
 
+    /* 内容区：纵向弹性布局，把整屏高度用满 */
     .slide-content {
-      position: relative;
       width: 95%;
       max-width: 95vw;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
       padding-top: 1.5vh;
-      padding-bottom: 1vh;
-      font-size: 3vh;
+      padding-bottom: 2vh;
+      font-size: 4vh;
     }
 
     /* ===== 表头：每页都有 ===== */
     .header {
+      flex: none;
       font-size: 1.9em;
       font-weight: 700;
       color: #1a1a1a;
@@ -60,8 +64,13 @@
       border-bottom: 3px solid #c62828;
     }
 
-    /* ===== 正文 ===== */
+    /* ===== 正文：自动均分剩余空间，把屏幕填满 ===== */
     .culture-list {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       list-style: none;
       width: 100%;
     }
@@ -147,22 +156,36 @@
       var slides = document.querySelectorAll('.slide');
       var contents = document.querySelectorAll('.slide-content');
 
-      /* ===== 自动适配字号：让每页都刚好撑满一屏，两页字号统一 ===== */
-      function fitOne(el, limit) {
-        var size = 7; // 起始 7vh
-        el.style.fontSize = size + 'vh';
-        for (var i = 0; i < 12; i++) {
-          var h = el.getBoundingClientRect().height;
-          if (h <= limit) break;
-          size = size * (limit / h) * 0.99;
-          if (size < 1.5) { size = 1.5; break; }
-          el.style.fontSize = size + 'vh';
+      /* ===== 量出"文字自然排下来"有多高（不含被拉伸的空隙） ===== */
+      function naturalHeight(c) {
+        var h = c.querySelector('.header').getBoundingClientRect().height;
+        var lis = c.querySelectorAll('.culture-list li');
+        for (var i = 0; i < lis.length; i++) {
+          h += lis[i].getBoundingClientRect().height;
         }
-        return size;
+        return h;
       }
 
+      /* ===== 二分法：精确找到"还能放下"的最大字号 ===== */
+      function fitOne(c, limit) {
+        var lo = 1.2, hi = 14, best = lo;
+        for (var i = 0; i < 18; i++) {
+          var mid = (lo + hi) / 2;
+          c.style.fontSize = mid + 'vh';
+          if (naturalHeight(c) <= limit) {
+            best = mid;
+            lo = mid;
+          } else {
+            hi = mid;
+          }
+        }
+        c.style.fontSize = best.toFixed(2) + 'vh';
+        return best;
+      }
+
+      /* ===== 两页分别算，取较小的那个字号，保证两页字号一致 ===== */
       function fitAll() {
-        var limit = window.innerHeight * 0.985;
+        var limit = window.innerHeight * 0.955;
         var min = 99;
         for (var i = 0; i < contents.length; i++) {
           var s = fitOne(contents[i], limit);
@@ -176,14 +199,25 @@
       /* ===== 全屏 ===== */
       function enterFullscreen() {
         var elem = document.documentElement;
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen().catch(function () {});
-        } else if (elem.webkitRequestFullscreen) {
-          elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-          elem.msRequestFullscreen();
+        var p = null;
+        try {
+          if (elem.requestFullscreen) {
+            p = elem.requestFullscreen();
+          } else if (elem.webkitRequestFullscreen) {
+            p = elem.webkitRequestFullscreen();
+          } else if (elem.msRequestFullscreen) {
+            p = elem.msRequestFullscreen();
+          }
+        } catch (e) {}
+
+        if (p && typeof p.then === 'function') {
+          p.then(function () { setTimeout(fitAll, 150); })
+           .catch(function () { setTimeout(fitAll, 150); });
         }
-        document.getElementById('hint').classList.add('hidden');
+        setTimeout(fitAll, 400);
+
+        var hint = document.getElementById('hint');
+        if (hint) hint.classList.add('hidden');
       }
 
       /* ===== 每 10 秒切换一页，来回循环 ===== */
@@ -199,20 +233,16 @@
         setInterval(nextSlide, 10000);
       });
 
-      window.addEventListener('resize', fitAll);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () { fitAll(); });
+      }
 
-      document.addEventListener('click', function () {
-        enterFullscreen();
-        fitAll();
-      });
-      document.addEventListener('touchstart', function () {
-        enterFullscreen();
-        fitAll();
-      });
-      document.addEventListener('keydown', function () {
-        enterFullscreen();
-        fitAll();
-      });
+      window.addEventListener('resize', function () { setTimeout(fitAll, 100); });
+      window.addEventListener('orientationchange', function () { setTimeout(fitAll, 300); });
+
+      document.addEventListener('click', enterFullscreen);
+      document.addEventListener('touchstart', enterFullscreen);
+      document.addEventListener('keydown', enterFullscreen);
     })();
   </script>
 </body>
