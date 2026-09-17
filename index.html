@@ -19,6 +19,7 @@
       font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
     }
 
+    /* ===== 每一页 ===== */
     .slide {
       position: absolute;
       top: 0;
@@ -28,53 +29,59 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.8s ease;
       pointer-events: none;
+      z-index: 10;
+    }
+
+    .slide.active {
+      opacity: 1;
     }
 
     .slide-content {
       position: relative;
-      z-index: 12;
       width: 92%;
       max-width: 92vw;
-      padding-top: 2vh;
-      padding-bottom: 1vh;
+      padding-top: 2.5vh;
+      padding-bottom: 2vh;
+      font-size: 3vh;
     }
 
+    /* ===== 表头：每页都有 ===== */
     .header {
-      font-size: 3.2vw;
+      font-size: 2.2em;
       font-weight: 700;
       color: #1a1a1a;
       text-align: center;
-      letter-spacing: 0.4vw;
-      margin-bottom: 1.5vh;
-      padding-bottom: 1vh;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5em;
+      padding-bottom: 0.32em;
       border-bottom: 3px solid #c62828;
     }
 
+    /* ===== 正文 ===== */
     .culture-list {
       list-style: none;
       width: 100%;
     }
 
     .culture-list li {
-      font-size: 1.5vw;
-      line-height: 1.35;
+      font-size: 1em;
+      line-height: 1.45;
       color: #1a1a1a;
-      margin-bottom: 0;
       text-align: left;
     }
 
-    .culture-list li.highlight,
-    .culture-list li.highlight strong {
+    .culture-list li.highlight {
       font-weight: 700;
-      color: #1a1a1a;
     }
 
     .culture-list li.indent {
-      padding-left: 2.8vw;
+      padding-left: 2em;
     }
 
+    /* ===== 全屏提示 ===== */
     #hint {
       position: fixed;
       bottom: 40px;
@@ -97,7 +104,9 @@
   </style>
 </head>
 <body>
-  <div class="slide">
+
+  <!-- ========== 第一页：第 1-10 条 ========== -->
+  <section class="slide active">
     <div class="slide-content">
       <div class="header">企业文化</div>
       <ul class="culture-list">
@@ -111,21 +120,58 @@
         <li>8.复利效应：公司和个人一定要不断迭代，追求卓越，通过不断优化、迭代、沉淀，达成财富人生的复利效应。</li>
         <li>9.开放心态：敢于批评与自我批评，能接受批评的人潜力无限。</li>
         <li>10.严谨负责：对自己发出的信息、提交的成果和推动的事项负责。充分打磨，认真核实，发布出去的必须是成品，不能是半成品，不把本该自己完成的检查和完善留给别人。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== 第二页：第 11-16 条 ========== -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="header">企业文化</div>
+      <ul class="culture-list">
         <li>11.勤俭务实：俭以养德，勤俭持家。</li>
-        <li>12.工作哲学：热爱工作，找到工作的节奏和结构，工作就是"在这个世界打怪快速升级"的最好机会，敬畏、尊重和珍惜工作和身边的同事，工作的终极目标依然是幸福、快乐和自由。</li>
+        <li>12.工作哲学：热爱工作，找到工作的节奏和结构，工作就是“在这个世界打怪快速升级”的最好机会，敬畏、尊重和珍惜工作和身边的同事，工作的终极目标依然是幸福、快乐和自由。</li>
         <li>13.德行根基：德行是一切的基础，德行是幸福的基石，财富的密码，成功的要素。</li>
         <li>14.鼓励创新：敢于提出新想法，勇于尝试新方法，不拘泥于经验和惯例。小步试错，快速验证，让创新落到实处，创造实际价值。</li>
         <li>15.有效动作与有效贡献：以目标为导向，以结果衡量价值。少做无效动作，多做有效贡献，不以忙碌代替成果，把时间和精力用在真正推动目标达成的事情上。</li>
         <li class="highlight">16.公司的根本目的</li>
-        <li class="highlight indent">"带一群人不断成长，发光发热，共同寻找快乐、幸福和自由。"</li>
+        <li class="highlight indent">“带一群人不断成长，发光发热，共同寻找快乐、幸福和自由。”</li>
       </ul>
     </div>
-  </div>
+  </section>
 
   <div id="hint">点击屏幕或按确认键进入全屏</div>
 
   <script>
     (function () {
+      var slides = document.querySelectorAll('.slide');
+      var contents = document.querySelectorAll('.slide-content');
+
+      function fitOne(el, limit) {
+        var size = 6;
+        el.style.fontSize = size + 'vh';
+        for (var i = 0; i < 10; i++) {
+          var h = el.getBoundingClientRect().height;
+          if (h <= limit) break;
+          size = size * (limit / h) * 0.98;
+          if (size < 1.2) { size = 1.2; break; }
+          el.style.fontSize = size + 'vh';
+        }
+        return size;
+      }
+
+      function fitAll() {
+        var limit = window.innerHeight * 0.95;
+        var min = 99;
+        for (var i = 0; i < contents.length; i++) {
+          var s = fitOne(contents[i], limit);
+          if (s < min) min = s;
+        }
+        for (var j = 0; j < contents.length; j++) {
+          contents[j].style.fontSize = min.toFixed(2) + 'vh';
+        }
+      }
+
       function enterFullscreen() {
         var elem = document.documentElement;
         if (elem.requestFullscreen) {
@@ -138,10 +184,32 @@
         document.getElementById('hint').classList.add('hidden');
       }
 
-      window.addEventListener('load', enterFullscreen);
-      document.addEventListener('click', enterFullscreen);
-      document.addEventListener('touchstart', enterFullscreen);
-      document.addEventListener('keydown', enterFullscreen);
+      var current = 0;
+      function nextSlide() {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+      }
+
+      window.addEventListener('load', function () {
+        fitAll();
+        setInterval(nextSlide, 10000);
+      });
+
+      window.addEventListener('resize', fitAll);
+
+      document.addEventListener('click', function () {
+        enterFullscreen();
+        fitAll();
+      });
+      document.addEventListener('touchstart', function () {
+        enterFullscreen();
+        fitAll();
+      });
+      document.addEventListener('keydown', function () {
+        enterFullscreen();
+        fitAll();
+      });
     })();
   </script>
 </body>
